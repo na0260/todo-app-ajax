@@ -78,13 +78,42 @@ function editStudent(id) {
     fetch(`/students/${id}`)
         .then(response => response.json())
         .then(student => {
-            document.getElementById('student-id').value = student.id;  // Store student ID in hidden field
+            document.getElementById('student-id').value = student.id;
             document.getElementById('name').value = student.name;
             document.getElementById('email').value = student.email;
             document.getElementById('course').value = student.course;
 
-            document.getElementById('form-title').textContent = "Edit Student";  // Update form title
-            document.getElementById('submit-button').textContent = "Update Student";  // Update button text
+            document.getElementById('form-title').textContent = "Edit Student";
+            document.getElementById('submit-button').textContent = "Update Student";
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function updateStudent(id) {
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const course = document.getElementById('course').value;
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    fetch(`/students/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            name: name,
+            email: email,
+            course: course
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            fetchStudents();
+            document.getElementById('student-form').reset();
+            document.getElementById('form-title').textContent = "Add New Student";
+            document.getElementById('submit-button').textContent = "Add Student";
         })
         .catch(error => console.error('Error:', error));
 }

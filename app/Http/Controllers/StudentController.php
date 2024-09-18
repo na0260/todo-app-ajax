@@ -53,7 +53,8 @@ class StudentController extends Controller
      */
     public function update(Request $request, Student $student)
     {
-        //
+        $student->update($request->all());
+        return response()->json($student, 200);
     }
 
     /**
