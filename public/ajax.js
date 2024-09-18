@@ -53,3 +53,18 @@ function addStudent() {
         })
         .catch(error => console.error('Error:', error));
 }
+
+function deleteStudent(id) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    fetch(`/students/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        }
+    })
+        .then(() => {
+            fetchStudents();
+        })
+        .catch(error => console.error('Error:', error));
+}
