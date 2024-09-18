@@ -3,7 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('student-form').addEventListener('submit', function(e) {
         e.preventDefault();
-        addStudent();
+        const studentId = document.getElementById('student-id').value;
+        if (studentId) {
+            updateStudent(studentId);
+        } else {
+            addStudent();
+        }
     });
 });
 function fetchStudents() {
@@ -65,6 +70,21 @@ function deleteStudent(id) {
     })
         .then(() => {
             fetchStudents();
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function editStudent(id) {
+    fetch(`/students/${id}`)
+        .then(response => response.json())
+        .then(student => {
+            document.getElementById('student-id').value = student.id;  // Store student ID in hidden field
+            document.getElementById('name').value = student.name;
+            document.getElementById('email').value = student.email;
+            document.getElementById('course').value = student.course;
+
+            document.getElementById('form-title').textContent = "Edit Student";  // Update form title
+            document.getElementById('submit-button').textContent = "Update Student";  // Update button text
         })
         .catch(error => console.error('Error:', error));
 }

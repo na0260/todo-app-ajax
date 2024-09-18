@@ -37,7 +37,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        //
+        return response()->json($student);
     }
 
     /**
